@@ -5,11 +5,25 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="noindex, nofollow">
-<title>Categories | Fovir.FYI</title>
+<title>Friends | Fovir.FYI</title>
 <meta name="keywords" content="">
-<meta name="description" content="">
+<meta name="description" content="Here are my friends:
+
+
+    
+    
+        
+            
+                
+                
+                    Fovir
+                    This is Fovir
+                
+            
+        
+    ">
 <meta name="author" content="Fovir">
-<link rel="canonical" href="http://localhost:1313/categories/">
+<link rel="canonical" href="http://localhost:1313/friends/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.ec726202ed9b62bafa5560c72e4b13cbf1be1500925ef92f0722af2f0b49fdec.css" integrity="sha256-7HJiAu2bYrr6VWDHLksTy/G&#43;FQCSXvkvByKvLwtJ/ew=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://img.fovir.fyi/fovir.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://img.fovir.fyi/fovir.ico">
@@ -18,9 +32,7 @@
 <link rel="mask-icon" href="http://localhost:1313/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
-<link rel="alternate" type="application/rss+xml" href="http://localhost:1313/categories/index.xml">
-<link rel="alternate" hreflang="zh" href="http://localhost:1313/zh/categories/">
-<link rel="alternate" hreflang="en" href="http://localhost:1313/categories/">
+<link rel="alternate" hreflang="en" href="http://localhost:1313/friends/">
 <noscript>
     <style>
         #theme-toggle,
@@ -41,7 +53,7 @@
 
 </head>
 
-<body class="list dark" id="top">
+<body class=" dark" id="top">
 
 <header class="header">
     <nav class="nav">
@@ -69,27 +81,133 @@
             </li>
             <li>
                 <a href="http://localhost:1313/categories/" title="Category">
-                    <span class="active">Category</span>
+                    <span>Category</span>
                 </a>
             </li>
             <li>
                 <a href="http://localhost:1313/friends/" title="Frineds">
-                    <span>Frineds</span>
+                    <span class="active">Frineds</span>
                 </a>
             </li>
         </ul>
     </nav>
 </header>
 <main class="main">
-<header class="page-header">
-    <h1>Categories</h1>
-</header>
 
-<ul class="terms-tags">
-    <li>
-        <a href="http://localhost:1313/categories/test/">test <sup><strong><sup>1</sup></strong></sup> </a>
-    </li>
-</ul>
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title entry-hint-parent">
+      Friends
+    </h1>
+  </header> 
+  <div class="post-content"><p><strong>Here are my friends:</strong></p>
+<style type="text/css">
+    .friends {
+        --link-count-per-row: 1;
+    }
+
+    @media screen and (min-width: 576px) {
+        .friends {
+            --link-count-per-row: 2;
+        }
+    }
+
+    @media screen and (min-width: 768px) {
+        .friends {
+            --link-count-per-row: 3;
+        }
+    }
+
+    .friends {
+        display: grid;
+        grid-template-columns: repeat(var(--link-count-per-row), 1fr);
+        grid-gap: 16px;
+    }
+
+     
+    .friend-skeleton {
+        height: 280px;
+        display: inline-block;
+        position: relative;
+    }
+
+    .friend {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transition: 0.67s cubic-bezier(0.19, 1, 0.22, 1);
+        border-radius: var(--radius);
+        box-shadow: 0 3px 1px -2px rgba(0, 0, 0, 0.2),
+            0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12) !important;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .friend:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2),
+            0 5px 8px 0 rgba(0, 0, 0, 0.14), 0 1px 14px 0 rgba(0, 0, 0, 0.12) !important;
+    }
+
+    .friend-avatar {
+        object-fit: cover;
+        width: 100%;
+        height: 180px;
+        margin: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    .friend-content {
+        text-align: center;
+        flex: 1;
+        width: 100%;
+        padding: 16px;
+        background: var(--entry);
+        transform: translate3d(0, 0, 0);
+    }
+
+    .friend-name {
+        font-size: 1.2rem;
+        font-weight: bold;
+        transform: inherit;
+    }
+
+    .friend-description {
+        font-size: 0.8rem;
+        color: var(--secondary);
+        transform: translate3d(0, 0, 0);
+    }
+</style>
+<div class="friends">
+    
+    <div class="friend-skeleton">
+        <a href="https://fovir.fyi" target="_blank">
+            <div class="friend">
+                <img class="friend-avatar" src="https://img.fovir.fyi/fovir.png" />
+                <div class="friend-content">
+                    <div class="friend-name">Fovir</div>
+                    <div class="friend-description">This is Fovir</div>
+                </div>
+            </div>
+        </a>
+    </div>
+    
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+
+  </footer>
+</article>
     </main>
     
 <footer class="footer">
@@ -159,6 +277,53 @@
         }
     };
 
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
 </script></body>
 
 </html>
