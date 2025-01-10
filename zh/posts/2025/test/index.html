@@ -359,16 +359,16 @@
 <h2 id="this-is-an-h2">This is an H2<a hidden class="anchor" aria-hidden="true" href="#this-is-an-h2">#</a></h2>
 <h3 id="字符效果和横线等">字符效果和横线等<a hidden class="anchor" aria-hidden="true" href="#字符效果和横线等">#</a></h3>
 <hr>
-<p><del>删除线</del> <!-- raw HTML omitted -->删除线（开启识别HTML标签时）<!-- raw HTML omitted -->
+<p><del>删除线</del> <s>删除线（开启识别HTML标签时）</s>
 <em>斜体字</em>      <em>斜体字</em>
 <strong>粗体</strong>  <strong>粗体</strong>
 <em><strong>粗斜体</strong></em> <em><strong>粗斜体</strong></em></p>
-<p>上标：X<!-- raw HTML omitted -->2<!-- raw HTML omitted -->，下标：O<!-- raw HTML omitted -->2<!-- raw HTML omitted --></p>
+<p>上标：X<sub>2</sub>，下标：O<sup>2</sup></p>
 <p><strong>缩写(同HTML的abbr标签)</strong></p>
 <blockquote>
 <p>即更长的单词或短语的缩写形式，前提是开启识别HTML标签时，已默认开启</p>
 </blockquote>
-<p>The <!-- raw HTML omitted -->HTML<!-- raw HTML omitted --> specification is maintained by the <!-- raw HTML omitted -->W3C<!-- raw HTML omitted -->.</p>
+<p>The <abbr title="Hyper Text Markup Language">HTML</abbr> specification is maintained by the <abbr title="World Wide Web Consortium">W3C</abbr>.</p>
 <h3 id="引用-blockquotes">引用 Blockquotes<a hidden class="anchor" aria-hidden="true" href="#引用-blockquotes">#</a></h3>
 <blockquote>
 <p>引用文本 Blockquotes</p>
@@ -686,7 +686,7 @@
 </blockquote>
 <h4 id="gfm-task-lists--emoji--fontawesome-icon-emoji--editormd-logo-emoji-editormd-logo-5x">GFM task lists &amp; Emoji &amp; fontAwesome icon emoji &amp; editormd logo emoji :editormd-logo-5x:<a hidden class="anchor" aria-hidden="true" href="#gfm-task-lists--emoji--fontawesome-icon-emoji--editormd-logo-emoji-editormd-logo-5x">#</a></h4>
 <ul>
-<li><input checked="" disabled="" type="checkbox"> &#x1f603; @mentions, &#x1f603; #refs, <a href="">links</a>, <strong>formatting</strong>, and <!-- raw HTML omitted -->tags<!-- raw HTML omitted --> supported :editormd-logo:;</li>
+<li><input checked="" disabled="" type="checkbox"> &#x1f603; @mentions, &#x1f603; #refs, <a href="">links</a>, <strong>formatting</strong>, and <del>tags</del> supported :editormd-logo:;</li>
 <li><input checked="" disabled="" type="checkbox"> list syntax required (any unordered or ordered list supported) :editormd-logo-3x:;</li>
 <li><input checked="" disabled="" type="checkbox"> [ ] &#x1f603; this is a complete item &#x1f603;;</li>
 <li><input disabled="" type="checkbox"> []this is an incomplete item <a href="">test link</a> :fa-star: @pandao;</li>
@@ -781,7 +781,27 @@
     </li>
 </ul>
 
-  </footer>
+  </footer><head>
+    
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+    
+</head>
+
+<body>
+    
+    <div id="waline"></div>
+    <script type="module">
+        import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+
+        init({
+            el: '#waline',
+            serverURL: 'https://waline.fovir.fyi',
+            dark: 'auto',
+            lang: 'en',
+            search: false,
+        });
+    </script>
+</body>
 </article>
     </main>
     

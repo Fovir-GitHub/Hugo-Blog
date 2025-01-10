@@ -115,6 +115,54 @@
                 &lt;/div&gt;
             &lt;/div&gt;
         &lt;/a&gt;
+    &lt;/div&gt;
+    
+    &lt;div class=&#34;friend-skeleton&#34;&gt;
+        &lt;a href=&#34;https://blog.iceyear.eu.org&#34; target=&#34;_blank&#34;&gt;
+            &lt;div class=&#34;friend&#34;&gt;
+                &lt;img class=&#34;friend-avatar&#34; src=&#34;https://blog.iceyear.eu.org/android-chrome-512x512.webp&#34; /&gt;
+                &lt;div class=&#34;friend-content&#34;&gt;
+                    &lt;div class=&#34;friend-name&#34;&gt;Ice Year の位面&lt;/div&gt;
+                    &lt;div class=&#34;friend-description&#34;&gt;Il n&amp;#39;y a pas de hasard, il n&amp;#39;y a que des rendez-vous.&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/a&gt;
+    &lt;/div&gt;
+    
+    &lt;div class=&#34;friend-skeleton&#34;&gt;
+        &lt;a href=&#34;https://yon.im/&#34; target=&#34;_blank&#34;&gt;
+            &lt;div class=&#34;friend&#34;&gt;
+                &lt;img class=&#34;friend-avatar&#34; src=&#34;https://static.yon.im/image/avatar.webp&#34; /&gt;
+                &lt;div class=&#34;friend-content&#34;&gt;
+                    &lt;div class=&#34;friend-name&#34;&gt;Yon Zilch&lt;/div&gt;
+                    &lt;div class=&#34;friend-description&#34;&gt;From the yon, into zilch.&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/a&gt;
+    &lt;/div&gt;
+    
+    &lt;div class=&#34;friend-skeleton&#34;&gt;
+        &lt;a href=&#34;https://blog.dich.bid/&#34; target=&#34;_blank&#34;&gt;
+            &lt;div class=&#34;friend&#34;&gt;
+                &lt;img class=&#34;friend-avatar&#34; src=&#34;https://avatars.githubusercontent.com/u/128880743&#34; /&gt;
+                &lt;div class=&#34;friend-content&#34;&gt;
+                    &lt;div class=&#34;friend-name&#34;&gt;Dich 的小站&lt;/div&gt;
+                    &lt;div class=&#34;friend-description&#34;&gt;用电子罗盘，转赛博核桃，勘电磁风水，寻网络龙脉。&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/a&gt;
+    &lt;/div&gt;
+    
+    &lt;div class=&#34;friend-skeleton&#34;&gt;
+        &lt;a href=&#34;https://blog.0pt.icu/&#34; target=&#34;_blank&#34;&gt;
+            &lt;div class=&#34;friend&#34;&gt;
+                &lt;img class=&#34;friend-avatar&#34; src=&#34;https://img.0pt.icu/blogbuilt/avatar.webp&#34; /&gt;
+                &lt;div class=&#34;friend-content&#34;&gt;
+                    &lt;div class=&#34;friend-name&#34;&gt;春风少年兄&lt;/div&gt;
+                    &lt;div class=&#34;friend-description&#34;&gt;你在世纪大道东门&lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/a&gt;
     &lt;/div&gt;</description>
     </item>
   </channel>
