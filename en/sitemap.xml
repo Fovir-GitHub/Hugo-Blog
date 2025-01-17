@@ -2,85 +2,85 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://blog.fovir.fyi/categories/</loc>
+    <loc>https://www.fovir.fyi/categories/</loc>
     <lastmod>2025-01-05T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
-                href="https://blog.fovir.fyi/zh/categories/"
+                href="https://www.fovir.fyi/zh/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://blog.fovir.fyi/categories/"
+                href="https://www.fovir.fyi/categories/"
                 />
   </url><url>
-    <loc>https://blog.fovir.fyi/</loc>
+    <loc>https://www.fovir.fyi/</loc>
     <lastmod>2025-01-05T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
-                href="https://blog.fovir.fyi/zh/"
+                href="https://www.fovir.fyi/zh/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://blog.fovir.fyi/"
+                href="https://www.fovir.fyi/"
                 />
   </url><url>
-    <loc>https://blog.fovir.fyi/posts/</loc>
+    <loc>https://www.fovir.fyi/posts/</loc>
     <lastmod>2025-01-05T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
-                href="https://blog.fovir.fyi/zh/posts/"
+                href="https://www.fovir.fyi/zh/posts/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://blog.fovir.fyi/posts/"
+                href="https://www.fovir.fyi/posts/"
                 />
   </url><url>
-    <loc>https://blog.fovir.fyi/categories/test/</loc>
+    <loc>https://www.fovir.fyi/categories/test/</loc>
     <lastmod>2025-01-05T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://blog.fovir.fyi/posts/2025/test/</loc>
+    <loc>https://www.fovir.fyi/posts/2025/test/</loc>
     <lastmod>2025-01-05T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
-                href="https://blog.fovir.fyi/zh/posts/2025/test/"
+                href="https://www.fovir.fyi/zh/posts/2025/test/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://blog.fovir.fyi/posts/2025/test/"
+                href="https://www.fovir.fyi/posts/2025/test/"
                 />
   </url><url>
-    <loc>https://blog.fovir.fyi/archives/</loc>
+    <loc>https://www.fovir.fyi/archives/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
-                href="https://blog.fovir.fyi/archives/"
+                href="https://www.fovir.fyi/archives/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://blog.fovir.fyi/archives/"
+                href="https://www.fovir.fyi/archives/"
                 />
   </url><url>
-    <loc>https://blog.fovir.fyi/friends/</loc>
+    <loc>https://www.fovir.fyi/friends/</loc>
   </url><url>
-    <loc>https://blog.fovir.fyi/search/</loc>
+    <loc>https://www.fovir.fyi/search/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
-                href="https://blog.fovir.fyi/zh/search/"
+                href="https://www.fovir.fyi/zh/search/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://blog.fovir.fyi/search/"
+                href="https://www.fovir.fyi/search/"
                 />
   </url>
 </urlset>
