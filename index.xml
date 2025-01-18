@@ -106,18 +106,6 @@
 &lt;div class=&#34;friends&#34;&gt;
     
     &lt;div class=&#34;friend-skeleton&#34;&gt;
-        &lt;a href=&#34;https://fovir.fyi&#34; target=&#34;_blank&#34;&gt;
-            &lt;div class=&#34;friend&#34;&gt;
-                &lt;img class=&#34;friend-avatar&#34; src=&#34;https://img.fovir.fyi/fovir.png&#34; /&gt;
-                &lt;div class=&#34;friend-content&#34;&gt;
-                    &lt;div class=&#34;friend-name&#34;&gt;Fovir&lt;/div&gt;
-                    &lt;div class=&#34;friend-description&#34;&gt;This is Fovir&lt;/div&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/a&gt;
-    &lt;/div&gt;
-    
-    &lt;div class=&#34;friend-skeleton&#34;&gt;
         &lt;a href=&#34;https://blog.iceyear.eu.org&#34; target=&#34;_blank&#34;&gt;
             &lt;div class=&#34;friend&#34;&gt;
                 &lt;img class=&#34;friend-avatar&#34; src=&#34;https://blog.iceyear.eu.org/android-chrome-512x512.webp&#34; /&gt;
