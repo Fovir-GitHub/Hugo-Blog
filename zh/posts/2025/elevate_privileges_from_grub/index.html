@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" dir="auto">
+<html lang="zh" dir="auto">
 
 <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script><meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="noindex, nofollow">
-<title>Escalate Privileges from Grub | Fovir.FYI</title>
-<meta name="keywords" content="grub">
-<meta name="description" content="This post records a method of using grub to escalate privileges that was accidentally discovered during the deployment of Cloudflare Tunnel.">
+<title>从 grub 进行提权 | Fovir.FYI</title>
+<meta name="keywords" content="">
+<meta name="description" content="本文记录了在部署 Cloudflare Tunnel 过程中发现的一种通过 grub 进行提权的方法。">
 <meta name="author" content="Fovir">
-<link rel="canonical" href="http://localhost:1313/posts/2025/escalate_privileges_from_grub/">
+<link rel="canonical" href="http://localhost:1313/zh/posts/2025/elevate_privileges_from_grub/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.9b585776e50717b97e3c848b15e54cad127c2891b5f4490bc1e307def6e8f57f.css" integrity="sha256-m1hXduUHF7l&#43;PISLFeVMrRJ8KJG19EkLweMH3vbo9X8=" rel="preload stylesheet" as="style">
 <link rel="icon" href="https://img.fovir.fyi/fovir.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="https://img.fovir.fyi/fovir.ico">
@@ -45,35 +45,35 @@
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="http://localhost:1313/" accesskey="h" title="Fovir.FYI (Alt + H)">Fovir.FYI</a>
+            <a href="http://localhost:1313/zh/" accesskey="h" title="Fovir.FYI (Alt + H)">Fovir.FYI</a>
             <div class="logo-switches">
                 <ul class="lang-switch"><li>|</li>
                     <li>
-                        <a href="http://localhost:1313/zh/" title="中文 🇨🇳 "
-                            aria-label="中文 :flag_China: ">中文 🇨🇳 </a>
+                        <a href="http://localhost:1313/" title="English 🇺🇸"
+                            aria-label="English :flag_United_States:">English 🇺🇸</a>
                     </li>
                 </ul>
             </div>
         </div>
         <ul id="menu">
             <li>
-                <a href="http://localhost:1313/search/" title="Search (Alt &#43; /)" accesskey=/>
-                    <span>Search</span>
+                <a href="http://localhost:1313/zh/search/" title="搜索 (Alt &#43; /)" accesskey=/>
+                    <span>搜索</span>
                 </a>
             </li>
             <li>
-                <a href="http://localhost:1313/archives/" title="Archive">
-                    <span>Archive</span>
+                <a href="http://localhost:1313/zh/archives/" title="归档">
+                    <span>归档</span>
                 </a>
             </li>
             <li>
-                <a href="http://localhost:1313/categories/" title="Category">
-                    <span>Category</span>
+                <a href="http://localhost:1313/zh/categories/" title="分类">
+                    <span>分类</span>
                 </a>
             </li>
             <li>
-                <a href="http://localhost:1313/friends/" title="Frineds">
-                    <span>Frineds</span>
+                <a href="http://localhost:1313/friends/" title="友情链接">
+                    <span>友情链接</span>
                 </a>
             </li>
         </ul>
@@ -85,12 +85,12 @@
   <header class="post-header">
     
     <h1 class="post-title entry-hint-parent">
-      Escalate Privileges from Grub
+      从 grub 进行提权
     </h1>
-    <div class="post-meta"><span title='2025-01-18 00:00:00 +0000 UTC'>January 18, 2025</span>&nbsp;·&nbsp;606 words&nbsp;·&nbsp;Fovir&nbsp;|&nbsp;Translations:
+    <div class="post-meta"><span title='2025-01-18 00:00:00 +0000 UTC'>一月 18, 2025</span>&nbsp;·&nbsp;139 字&nbsp;·&nbsp;Fovir&nbsp;|&nbsp;语言:
 <ul class="i18n_list">
     <li>
-        <a href="http://localhost:1313/zh/posts/2025/elevate_privileges_from_grub/">中文 🇨🇳 </a>
+        <a href="http://localhost:1313/posts/2025/escalate_privileges_from_grub/">English 🇺🇸</a>
     </li>
 </ul>
 
@@ -99,16 +99,16 @@
         <div class="toc">
             <details  open>
                 <summary accesskey="c" title="(Alt + C)">
-                    <span class="details">Table of Contents</span>
+                    <span class="details">目录</span>
                 </summary>
 
                 <div class="inner"><ul>
                         <li>
-                            <a href="#background" aria-label="Background">Background</a></li>
+                            <a href="#%e8%83%8c%e6%99%af" aria-label="背景">背景</a></li>
                         <li>
-                            <a href="#method" aria-label="Method">Method</a></li>
+                            <a href="#%e6%96%b9%e6%b3%95" aria-label="方法">方法</a></li>
                         <li>
-                            <a href="#prevention" aria-label="Prevention">Prevention</a>
+                            <a href="#%e9%a2%84%e9%98%b2" aria-label="预防">预防</a>
                         </li>
                     </ul>
                 </div>
@@ -174,13 +174,13 @@
             return rect.top + win.pageYOffset;
         }
     </script>
-  <div class="post-content"><h1 id="background">Background<a hidden class="anchor" aria-hidden="true" href="#background">#</a></h1>
-<p>Few days ago, I tried to deploy <code>Gitea</code> on my VPS, and enabled SSH connection. However, the SSH connection can expose my IP address, which does harm to privacy and security. So I tried to find ways to hide my IP. Finally, I decided to use Cloudflare Tunnel.</p>
-<p>At first, I followed ChatGPT and Cloudflare official document steps to deploy Cloudflare Tunnel, and everything went well in the beginning. But in the next morning, I found that I couldn&rsquo;t connect to my VPS through SSH, and all of my services were down. To address this problem, I logged into the website of the provider, <a href="https://greencloudvps.com/">Greencloud</a> and tried to reach my VPS through the official terminal. When I launched the terminal, it required me to key in username and password to log in. The username, root, is short and easy to type in, while my password was too long to type in manually. It is worse that Greencloud does not provide copy and paste function in its console. That is, my password blocked myself.</p>
-<p>So I had to find ways to log in my VPS. And during this process, I found a way to bypass the password authentication and run bash as root user through grub. Now, I would like to introduce this method to you.</p>
-<h1 id="method">Method<a hidden class="anchor" aria-hidden="true" href="#method">#</a></h1>
-<p>Greencloud does not provide copy and paste function, but it offers <code>Send CtrlAltDel</code> function, which can force the VPS to reboot, enabling escalate privileges through grub.</p>
-<p>In the grub interface, press <code>e</code> to edit the commands before booting. By default, the line starting with <code>linux</code> may look like:</p>
+  <div class="post-content"><h1 id="背景">背景<a hidden class="anchor" aria-hidden="true" href="#背景">#</a></h1>
+<p>前几天，我尝试在我的 VPS 上安装 <code>Gitea</code>， 然后配置 SSH 进行仓库的克隆和拉取等操作。但是直接使用 SSH 的时候会暴露我的 IP，出于安全的考虑，我需要隐藏我的 IP，同时保证外部访问。最后，我选择用 Cloudflare Tunnel 来实现我的要求。</p>
+<p>刚开始，我按照 ChatGPT 和官方文档的步骤进行部署，就在我以为一切顺利的时候，第二天早上，我发现我无法用 SSH 连接上我的 VPS 了，并且 VPS 上的应用全部无法访问了。为了修复这个问题，我登录了 VPS 的提供商——<a href="https://greencloudvps.com/">绿云</a>，并且尝试使用官方的后台终端登录 VPS。</p>
+<p>当我尝试登录的时候，我发现绿云官方的终端不提供复制粘贴的功能。而我的密码又非常长，这就导致我只能手动输入，但是由于输入时间很长，TTY 终端会刷新并且要求重新输入用户名和密码。因此，我不得不寻找其他方法。在这个过程中，我发现了绕过密码认证并且以 root 身份登录 bash 的方法。</p>
+<h1 id="方法">方法<a hidden class="anchor" aria-hidden="true" href="#方法">#</a></h1>
+<p>虽然绿云不提供复制粘贴的功能，但是它提供 <code>Send CtrlAltDel</code> 的功能，这个功能是向 VPS 发送 <code>Ctrl + Alt + Del</code> 按键，在 Linux 服务器上的表现就是强制重启。因此，我们就可以使用 grub 进行提权。</p>
+<p>当我们进入 grub 界面的时候，按下 <code>e</code> 进入编辑模式，这里可以编辑引导时的命令。默认情况下，以 <code>linux</code> 开头的命令可能长这样：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -189,7 +189,7 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">linux /boot/xxx <span class="nv">root</span><span class="o">=</span><span class="nv">UUID</span><span class="o">=</span>xxx ro quiet
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>Then appended a statement to this command like below:</p>
+</div><p>这个时候，我们在这段命令的末尾加上一个参数。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -198,21 +198,27 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">linux /boot/xxx <span class="nv">root</span><span class="o">=</span><span class="nv">UUID</span><span class="o">=</span>xxx ro quiet <span class="nv">init</span><span class="o">=</span>/bin/bash
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>In this way, the machine will boot and launch <code>/bin/bash</code> as root. Now, press <code>Ctrl + X</code> to boot. Then, the screen may look like:</p>
+</div><p>这样，在引导的过程中，我们就能以 root 身份运行 bash 了。此时，我们按下 <code>Ctrl + X</code> 退出编辑模式并继续引导。这个时候，屏幕上显示的内容大致如下：</p>
 <p>
 
 <div class="post-img-view">
 
-  <a data-fancybox="gallery" href="https://img.fovir.fyi/blog/escalate-privileges-from-grub-root.png#center" data-caption="Run bash as root">
-    <img src="https://img.fovir.fyi/blog/escalate-privileges-from-grub-root.png#center" alt="Run bash as root"  />
+  <a data-fancybox="gallery" href="https://img.fovir.fyi/blog/escalate-privileges-from-grub-root.png#center" data-caption="以 root 身份运行 bash">
+    <img src="https://img.fovir.fyi/blog/escalate-privileges-from-grub-root.png#center" alt="以 root 身份运行 bash"  />
   </a>
 </div>
 </p>
-<p>From the screenshot above, it is clear that we have logged in as root. So the next step is to modify the password.</p>
-<p>Usually, we can use command <code>passwd</code> to modify the password. But in this case, the whole disk is in read-only mode, causing the <code>passwd</code> command to fail like below:</p>
-<pre><code>![Fail to run `passwd`](https://img.fovir.fyi/blog/escalate-privilege-from-grub-fail-to-passwd.png#center)
-</code></pre>
-<p>So before running <code>passwd</code>, it needs to mount the disk with read and write mode at first. The command is below:</p>
+<p>可以看到，我们此时已经是 root 了。这就意味着，我们可以进行修改密码的操作。但是由于这个时候的硬盘处于只读模式，所以如果直接用 <code>passwd</code> 命令进行修改密码会发生错误，如下图：</p>
+<p>
+
+<div class="post-img-view">
+
+  <a data-fancybox="gallery" href="https://img.fovir.fyi/blog/escalate-privilege-from-grub-fail-to-passwd.png#center" data-caption="passwd 错误">
+    <img src="https://img.fovir.fyi/blog/escalate-privilege-from-grub-fail-to-passwd.png#center" alt="passwd 错误"  />
+  </a>
+</div>
+</p>
+<p>因此，在修改密码之前，我们需要一个准备工作，就是将硬盘以读写模式挂载。运行如下命令：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -221,8 +227,8 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mount -o remount,rw /
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>This command mounts the root directory in read and write mode, and now we can use <code>passwd</code> to change the password.</p>
-<p>Then, it comes to the final step. Since it is in the booting stage, which means the machine has not started yet, it is not suitable to use <code>reboot</code> to restart the system. Instead, we should execute <code>/sbin/init</code> to continue booting. So run this command:</p>
+</div><p>这条命令将根目录挂载为读写模式。此时我们再运行 <code>passwd</code> 命令就可以成功修改密码了。</p>
+<p>当我们成功修改密码之后，就要执行最后一步了。由于此时 VPS 还处于引导阶段，这就意味着它还没有真正地开机，所以用 <code>reboot</code> 进行重启是不合适的。当然，可以运行 <code>reboot</code> ，但结果就是 VPS 卡住，然后需要再一次重启，重新引导（无需重复这个过程）。合适的做法是让 VPS 继续引导的过程，这就要用到以下命令：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -231,10 +237,10 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">exec</span> /sbin/init
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>After that, we can see the login interface. Now input the username and the new password, and it will log in successfully.</p>
-<h1 id="prevention">Prevention<a hidden class="anchor" aria-hidden="true" href="#prevention">#</a></h1>
-<p>There are many ways to prevent this threat, such as encrypting the disk and encrypting the grub. I would like to introduce the later one here.</p>
-<p>To encrypt grub, run the following command to create a password.</p>
+</div><p>之后，我们就能看到登录界面，输入用户名和新的密码，我们就能成功登录了。</p>
+<h1 id="预防">预防<a hidden class="anchor" aria-hidden="true" href="#预防">#</a></h1>
+<p>无论是服务器上的 Linux 还是桌面端的 Linux，都有办法来防止这种威胁发生。比如，我们可以加密硬盘或者加密 grub。这里，我介绍后者。</p>
+<p>首先，运行以下命令，为 grub 引导创建一个密码。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -243,7 +249,7 @@
 <pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">grub-mkpasswd-pbkdf2
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>After inputting the password, it will output a string of hash value. Copy it and then edit the file <code>/etc/grub.d/40_custom</code>, append the following content to it:</p>
+</div><p>按照提示输完密码之后，它会返回一段哈希值，记住这段哈希值。打开文件 <code>/etc/grub.d/40_custom</code>，添加以下内容：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -254,12 +260,11 @@
 </span></span><span class="line"><span class="cl">password_pbkdf2 root your_hash_string
 </span></span></code></pre></td></tr></table>
 </div>
-</div><p>Replace the <code>your_hash_string</code> with the hash value generated before.</p>
-<p>And finally, run <code>grub-mkconfig -o /boot/grub/grub.cfg</code> to apply the change.</p>
-<p>After that, if someone wants to modify the password through grub, he/she is required to enter the password at first, preventing the escalation of privileges from happening.</p>
+</div><p>这里，把 <code>your_hash_string</code> 替换成前面生成的哈希值，然后运行 <code>grub-mkconfig -o /boot/grub/grub.cfg</code> 使其生效。</p>
+<p>配置之后，每次进行开机引导或者修改启动命令的时候，用户都会被要求输入密码。这就达到了防止提权的目的。</p>
 <hr>
 <blockquote>
-<p>Reference <br />
+<p>参考 <br />
 <a href="https://chatgpt.com">ChatGPT</a></p>
 </blockquote>
 
@@ -273,8 +278,8 @@
 
 <ul class="share-buttons">
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Escalate Privileges from Grub on x"
-            href="https://x.com/intent/tweet/?text=Escalate%20Privileges%20from%20Grub&amp;url=http%3a%2f%2flocalhost%3a1313%2fposts%2f2025%2fescalate_privileges_from_grub%2f&amp;hashtags=">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share 从 grub 进行提权 on x"
+            href="https://x.com/intent/tweet/?text=%e4%bb%8e%20grub%20%e8%bf%9b%e8%a1%8c%e6%8f%90%e6%9d%83&amp;url=http%3a%2f%2flocalhost%3a1313%2fzh%2fposts%2f2025%2felevate_privileges_from_grub%2f&amp;hashtags=">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
@@ -282,8 +287,8 @@
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Escalate Privileges from Grub on linkedin"
-            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2flocalhost%3a1313%2fposts%2f2025%2fescalate_privileges_from_grub%2f&amp;title=Escalate%20Privileges%20from%20Grub&amp;summary=Escalate%20Privileges%20from%20Grub&amp;source=http%3a%2f%2flocalhost%3a1313%2fposts%2f2025%2fescalate_privileges_from_grub%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share 从 grub 进行提权 on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3a%2f%2flocalhost%3a1313%2fzh%2fposts%2f2025%2felevate_privileges_from_grub%2f&amp;title=%e4%bb%8e%20grub%20%e8%bf%9b%e8%a1%8c%e6%8f%90%e6%9d%83&amp;summary=%e4%bb%8e%20grub%20%e8%bf%9b%e8%a1%8c%e6%8f%90%e6%9d%83&amp;source=http%3a%2f%2flocalhost%3a1313%2fzh%2fposts%2f2025%2felevate_privileges_from_grub%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
@@ -291,8 +296,8 @@
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Escalate Privileges from Grub on reddit"
-            href="https://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fposts%2f2025%2fescalate_privileges_from_grub%2f&title=Escalate%20Privileges%20from%20Grub">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share 从 grub 进行提权 on reddit"
+            href="https://reddit.com/submit?url=http%3a%2f%2flocalhost%3a1313%2fzh%2fposts%2f2025%2felevate_privileges_from_grub%2f&title=%e4%bb%8e%20grub%20%e8%bf%9b%e8%a1%8c%e6%8f%90%e6%9d%83">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
@@ -300,8 +305,8 @@
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Escalate Privileges from Grub on facebook"
-            href="https://facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fposts%2f2025%2fescalate_privileges_from_grub%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share 从 grub 进行提权 on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=http%3a%2f%2flocalhost%3a1313%2fzh%2fposts%2f2025%2felevate_privileges_from_grub%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
@@ -309,8 +314,8 @@
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Escalate Privileges from Grub on whatsapp"
-            href="https://api.whatsapp.com/send?text=Escalate%20Privileges%20from%20Grub%20-%20http%3a%2f%2flocalhost%3a1313%2fposts%2f2025%2fescalate_privileges_from_grub%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share 从 grub 进行提权 on whatsapp"
+            href="https://api.whatsapp.com/send?text=%e4%bb%8e%20grub%20%e8%bf%9b%e8%a1%8c%e6%8f%90%e6%9d%83%20-%20http%3a%2f%2flocalhost%3a1313%2fzh%2fposts%2f2025%2felevate_privileges_from_grub%2f">
             <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
@@ -318,8 +323,8 @@
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Escalate Privileges from Grub on telegram"
-            href="https://telegram.me/share/url?text=Escalate%20Privileges%20from%20Grub&amp;url=http%3a%2f%2flocalhost%3a1313%2fposts%2f2025%2fescalate_privileges_from_grub%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share 从 grub 进行提权 on telegram"
+            href="https://telegram.me/share/url?text=%e4%bb%8e%20grub%20%e8%bf%9b%e8%a1%8c%e6%8f%90%e6%9d%83&amp;url=http%3a%2f%2flocalhost%3a1313%2fzh%2fposts%2f2025%2felevate_privileges_from_grub%2f">
             <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
                 <path
                     d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
@@ -327,8 +332,8 @@
         </a>
     </li>
     <li>
-        <a target="_blank" rel="noopener noreferrer" aria-label="share Escalate Privileges from Grub on ycombinator"
-            href="https://news.ycombinator.com/submitlink?t=Escalate%20Privileges%20from%20Grub&u=http%3a%2f%2flocalhost%3a1313%2fposts%2f2025%2fescalate_privileges_from_grub%2f">
+        <a target="_blank" rel="noopener noreferrer" aria-label="share 从 grub 进行提权 on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=%e4%bb%8e%20grub%20%e8%bf%9b%e8%a1%8c%e6%8f%90%e6%9d%83&u=http%3a%2f%2flocalhost%3a1313%2fzh%2fposts%2f2025%2felevate_privileges_from_grub%2f">
             <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
                 xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
                 <path
@@ -364,7 +369,7 @@
     </main>
     
 <footer class="footer">
-    <span>&copy; 2025 <a href="http://localhost:1313/">Fovir.FYI</a></span> · 
+    <span>&copy; 2025 <a href="http://localhost:1313/zh/">Fovir.FYI</a></span> · 
 
     <span>
         Powered by
@@ -437,12 +442,12 @@
 
         const copybutton = document.createElement('button');
         copybutton.classList.add('copy-code');
-        copybutton.innerHTML = 'copy';
+        copybutton.innerHTML = '复制';
 
         function copyingDone() {
-            copybutton.innerHTML = 'copied!';
+            copybutton.innerHTML = '已复制！';
             setTimeout(() => {
-                copybutton.innerHTML = 'copy';
+                copybutton.innerHTML = '复制';
             }, 2000);
         }
 

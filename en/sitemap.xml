@@ -2,91 +2,85 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://www.fovir.fyi/categories/</loc>
+    <loc>http://localhost:1313/categories/</loc>
     <lastmod>2025-01-18T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
-                href="https://www.fovir.fyi/zh/categories/"
+                href="http://localhost:1313/zh/categories/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://www.fovir.fyi/categories/"
+                href="http://localhost:1313/categories/"
                 />
   </url><url>
-    <loc>https://www.fovir.fyi/categories/cyber-security/</loc>
+    <loc>http://localhost:1313/categories/cyber-security/</loc>
     <lastmod>2025-01-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://www.fovir.fyi/posts/2025/escalate_privileges_from_grub/</loc>
-    <lastmod>2025-01-18T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://www.fovir.fyi/</loc>
+    <loc>http://localhost:1313/posts/2025/escalate_privileges_from_grub/</loc>
     <lastmod>2025-01-18T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
-                href="https://www.fovir.fyi/zh/"
+                href="http://localhost:1313/zh/posts/2025/elevate_privileges_from_grub/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://www.fovir.fyi/"
+                href="http://localhost:1313/posts/2025/escalate_privileges_from_grub/"
                 />
   </url><url>
-    <loc>https://www.fovir.fyi/posts/</loc>
+    <loc>http://localhost:1313/</loc>
     <lastmod>2025-01-18T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
-                href="https://www.fovir.fyi/zh/posts/"
+                href="http://localhost:1313/zh/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://www.fovir.fyi/posts/"
+                href="http://localhost:1313/"
                 />
   </url><url>
-    <loc>https://www.fovir.fyi/categories/test/</loc>
-    <lastmod>2025-01-05T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>https://www.fovir.fyi/posts/2025/test/</loc>
-    <lastmod>2025-01-05T00:00:00+00:00</lastmod>
+    <loc>http://localhost:1313/posts/</loc>
+    <lastmod>2025-01-18T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
-                href="https://www.fovir.fyi/zh/posts/2025/test/"
+                href="http://localhost:1313/zh/posts/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://www.fovir.fyi/posts/2025/test/"
+                href="http://localhost:1313/posts/"
                 />
   </url><url>
-    <loc>https://www.fovir.fyi/archives/</loc>
+    <loc>http://localhost:1313/archives/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
-                href="https://www.fovir.fyi/archives/"
+                href="http://localhost:1313/archives/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://www.fovir.fyi/archives/"
+                href="http://localhost:1313/archives/"
                 />
   </url><url>
-    <loc>https://www.fovir.fyi/friends/</loc>
+    <loc>http://localhost:1313/friends/</loc>
   </url><url>
-    <loc>https://www.fovir.fyi/search/</loc>
+    <loc>http://localhost:1313/search/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
-                href="https://www.fovir.fyi/zh/search/"
+                href="http://localhost:1313/zh/search/"
                 />
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
-                href="https://www.fovir.fyi/search/"
+                href="http://localhost:1313/search/"
                 />
   </url>
 </urlset>
