@@ -57,7 +57,7 @@
     <loc>https://www.fovir.fyi/zh/categories/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8/</loc>
     <lastmod>2025-01-18T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>https://www.fovir.fyi/archives/</loc>
+    <loc>https://www.fovir.fyi/zh/archives/</loc>
     <xhtml:link
                 rel="alternate"
                 hreflang="en"
@@ -66,7 +66,7 @@
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
-                href="https://www.fovir.fyi/archives/"
+                href="https://www.fovir.fyi/zh/archives/"
                 />
   </url><url>
     <loc>https://www.fovir.fyi/zh/search/</loc>

@@ -2,24 +2,24 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Fovir.FYI</title>
-    <link>https://www.fovir.fyi/</link>
+    <link>http://localhost:1313/</link>
     <description>Recent content on Fovir.FYI</description>
     <generator>Hugo -- 0.141.0</generator>
     <language>en</language>
     <lastBuildDate>Sat, 18 Jan 2025 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://www.fovir.fyi/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Escalate Privileges from Grub</title>
-      <link>https://www.fovir.fyi/posts/2025/escalate_privileges_from_grub/</link>
+      <link>http://localhost:1313/posts/2025/escalate_privileges_from_grub/</link>
       <pubDate>Sat, 18 Jan 2025 00:00:00 +0000</pubDate>
-      <guid>https://www.fovir.fyi/posts/2025/escalate_privileges_from_grub/</guid>
+      <guid>http://localhost:1313/posts/2025/escalate_privileges_from_grub/</guid>
       <description>This post records a method of using grub to escalate privileges that was accidentally discovered during the deployment of Cloudflare Tunnel.</description>
     </item>
     <item>
       <title>Friends</title>
-      <link>https://www.fovir.fyi/friends/</link>
+      <link>http://localhost:1313/friends/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://www.fovir.fyi/friends/</guid>
+      <guid>http://localhost:1313/friends/</guid>
       <description>&lt;p&gt;&lt;strong&gt;Here are my friends:&lt;/strong&gt;&lt;/p&gt;
 &lt;style type=&#34;text/css&#34;&gt;
     .friends {
