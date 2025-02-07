@@ -4,10 +4,17 @@
     <title>Categories on Fovir.FYI</title>
     <link>https://www.fovir.fyi/categories/</link>
     <description>Recent content in Categories on Fovir.FYI</description>
-    <generator>Hugo -- 0.141.0</generator>
+    <generator>Hugo -- 0.143.1</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 18 Jan 2025 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 07 Feb 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://www.fovir.fyi/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Website</title>
+      <link>https://www.fovir.fyi/categories/website/</link>
+      <pubDate>Fri, 07 Feb 2025 00:00:00 +0000</pubDate>
+      <guid>https://www.fovir.fyi/categories/website/</guid>
+      <description></description>
+    </item>
     <item>
       <title>Cyber Security</title>
       <link>https://www.fovir.fyi/categories/cyber-security/</link>

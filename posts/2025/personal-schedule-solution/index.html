@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en" dir=" auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Personal Schedule Solution | Fovir.FYI</title>
+<meta name="keywords" content="Radicale, Thunderbird, Traefik, DAVx5, Etar">
+<meta name="description" content="This post shares how do I use Radicale as the backend and use Thunderbird and DAVx5 &#43; Etar Calendar as the frontend to build my personal scheduler.">
+<meta name="author" content="Fovir">
+<link rel="canonical" href="https://www.fovir.fyi/posts/2025/personal-schedule-solution/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.e17687f5d5baed7acc4f72cb621338c2bd55bf17b7673ab4ef94eea896f0c9fc.css" integrity="sha256-4XaH9dW67XrMT3LLYhM4wr1Vvxe3Zzq075TuqJbwyfw=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://img.fovir.fyi/fovir.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://img.fovir.fyi/fovir.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="https://img.fovir.fyi/fovir-32x32.png">
+<link rel="apple-touch-icon" href="https://www.fovir.fyi/apple-touch-icon.png">
+<link rel="mask-icon" href="https://www.fovir.fyi/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://www.fovir.fyi/posts/2025/personal-schedule-solution/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+</noscript><script defer src="https://umami.fovir.fyi/script.js" data-website-id="e11a66bf-a5ff-40a4-b033-2ca378e71094"></script>
+
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css" />
+<meta property="og:url" content="https://www.fovir.fyi/posts/2025/personal-schedule-solution/">
+  <meta property="og:site_name" content="Fovir.FYI">
+  <meta property="og:title" content="Personal Schedule Solution">
+  <meta property="og:description" content="This post shares how do I use Radicale as the backend and use Thunderbird and DAVx5 &#43; Etar Calendar as the frontend to build my personal scheduler.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-02-07T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-02-07T00:00:00+00:00">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Personal Schedule Solution">
+<meta name="twitter:description" content="This post shares how do I use Radicale as the backend and use Thunderbird and DAVx5 &#43; Etar Calendar as the frontend to build my personal scheduler.">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://www.fovir.fyi/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Personal Schedule Solution",
+      "item": "https://www.fovir.fyi/posts/2025/personal-schedule-solution/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Personal Schedule Solution",
+  "name": "Personal Schedule Solution",
+  "description": "This post shares how do I use Radicale as the backend and use Thunderbird and DAVx5 + Etar Calendar as the frontend to build my personal scheduler.",
+  "keywords": [
+    "Radicale", "Thunderbird", "Traefik", "DAVx5", "Etar"
+  ],
+  "articleBody": "Background Due to large number of schedule, it is necessary for me to have a calendar which can help me to schedule my day. In the last year, I used Outlook Calendar to schedule my time. It is both useful and convenient, but I still choose to self-host a scheduler for privacy reasons.\nMy Solution My solution contains two parts, the server and the client. Both of them should be open-source and non-commercialized applications, which can protect my privacy as much as possible.\nFor the server side, I choose Radicale to be the CalDAV backend, and use Traefik for reverse proxy. To hide the IP of my server, I have Radicale running behind Gcore’s CDN.\nFor the client side, I have two platforms, the Linux Desktop and the Android mobile phone. For the previous one, I use Thunderbird Calendar and for the last one, I use DAVx5 + Etar Calendar.\nSo my solution can be displayed as a graph below:\ngraph LR subgraph Server Radicale--\u003eTraefik end subgraph Clients subgraph Linux Thunderbird end subgraph Android DAVx5--\u003eclient[Etar Calendar] end end Gcore[Gcore CDN] Traefik--\u003eGcore Gcore--\u003eThunderbird Gcore--\u003eDAVx5 Now, I will introduce how to deploy Radicale and Traefik and how to configure the clients.\nDeploy Traefik I use docker compose to deploy Traefik. Here is my compose file:\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 version: '3' services: reverse-proxy: image: traefik:v3.2 container_name: traefik command: - \"--api.insecure=false\" - \"--log.level=DEBUG\" - \"--providers.docker=true\" - \"--providers.docker.exposedbydefault=false\" - \"--entrypoints.websecure.address=:443\" - \"--entryPoints.websecure.http.tls.certResolver=myresolver\" - \"--certificatesresolvers.myresolver.acme.tlschallenge=true\" - \"--certificatesresolvers.myresolver.acme.email=your-email@example.com\" - \"--certificatesresolvers.myresolver.acme.storage=/acme.json\" # - \"--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory\" ulimits: nproc: 65535 nofile: soft: 65535 hard: 65535 networks: - traefik ports: - \"443:443\" volumes: - /var/run/docker.sock:/var/run/docker.sock - ./acme.json:/acme.json - ./auth:/auth networks: traefik: external: true Replace the your-email@example.com with your email.\nThe ./auth folder in line 30 stores the user authentication information of Radicale, and I will explain it further in the next section.\nBefore starting, it needs a network, running the following command to create a network.\n1 docker network create traefik To store the SSL certificate, it also requires a file named acme.json. Just running these commands.\n1 2 touch acme.json chmod 600 acme.json Attention: The chmod 600 acme.json is very important!\nNow, the directory looks like:\n1 2 3 4 5 traefik/ ├── acme.json ├── auth │ └── radicale └── docker-compose.yml The radicale stores the credential of Radicale authentication.\nNow, we can start with the following command.\n1 docker compose up -d Deploy Radicale I prefer to deploy application with docker. So I use docker-radicale to deploy Radicale.\nHere is my compose file and I will explain it later.\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 # Can be enhanced with an additional compose file # See also https://docs.docker.com/compose/production/#modify-your-compose-file-for-production services: radicale: image: tomsquest/docker-radicale container_name: radicale ports: - 127.0.0.1:5232:5232 init: true read_only: true security_opt: - no-new-privileges:true cap_drop: - ALL cap_add: - SETUID - SETGID - CHOWN - KILL deploy: resources: limits: memory: 256M pids: 50 healthcheck: test: curl -f http://127.0.0.1:5232 || exit 1 interval: 30s retries: 3 restart: unless-stopped labels: - \"traefik.enable=true\" - \"traefik.http.routers.radicale.rule=Host(`radicale.example.com`)\" - \"traefik.http.routers.radicale.entrypoints=websecure\" - \"traefik.http.routers.radicale.tls.certresolver=myresolver\" - \"traefik.docker.network=traefik\" - \"traefik.http.routers.radicale.middlewares=radicale-auth\" - \"traefik.http.middlewares.radicale-auth.basicauth.usersfile=/auth/radicale\" - \"traefik.http.middlewares.radicale-auth.basicauth.headerField=X-Remote-User\" networks: - traefik volumes: - ./data:/data - ./config:/config:ro networks: traefik: external: true Replace the radicale.example.com with your own domain, and set an A DNS record which points to the IP of your server. Once the ACME challenge is done, there will be some content in the acme.json.\nFor security reasons, it is better to turn on the authentication option. So I add a middle ware between Radicale and Traefik for authentication. Since Radicale uses a configuration file to setting, we need to create a file named config and put it under the config/ folder. So the structure of the directory is:\n1 2 3 4 radicale/ ├── config │ └── config └── docker-compose.yml There are three types of authentication, htpasswd, remote_user and http_x_remote_user. Because I use Traefik, so I have to use the last one, http_x_remote_user. The configuration file is below:\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 # -*- mode: conf -*- # vim:ft=cfg # Config file for Radicale - A simple calendar server # # Place it into /etc/radicale/config (global) # or ~/.config/radicale/config (user) # # The current values are the default ones [server] # CalDAV server hostnames separated by a comma # IPv4 syntax: address:port # IPv6 syntax: [address]:port # Hostname syntax (using \"getaddrinfo\" to resolve to IPv4/IPv6 adress(es)): hostname:port # For example: 0.0.0.0:9999, [::]:9999, localhost:9999 #hosts = localhost:5232 hosts = 0.0.0.0:5232 # Max parallel connections #max_connections = 8 # Max size of request body (bytes) #max_content_length = 100000000 # Socket timeout (seconds) #timeout = 30 # SSL flag, enable HTTPS protocol #ssl = False # SSL certificate path #certificate = /etc/ssl/radicale.cert.pem # SSL private key #key = /etc/ssl/radicale.key.pem # CA certificate for validating clients. This can be used to secure # TCP traffic between Radicale and a reverse proxy #certificate_authority = [encoding] # Encoding for responding requests #request = utf-8 # Encoding for storing local collections #stock = utf-8 [auth] # Authentication method # Value: none | htpasswd | remote_user | http_x_remote_user type = http_x_remote_user # Htpasswd filename # htpasswd_filename = # Htpasswd encryption method # Value: plain | bcrypt | md5 | sha256 | sha512 | autodetect # bcrypt requires the installation of 'bcrypt' module. # htpasswd_encryption = # Incorrect authentication delay (seconds) #delay = 1 # Message displayed in the client when a password is needed #realm = Radicale - Password Required # Сonvert username to lowercase, must be true for case-insensitive auth providers #lc_username = False [rights] # Rights backend # Value: none | authenticated | owner_only | owner_write | from_file # type = owner_only # File for rights management from_file #file = /etc/radicale/rights # Permit delete of a collection (global) #permit_delete_collection = True [storage] # Storage backend # Value: multifilesystem | multifilesystem_nolock #type = multifilesystem # Folder for storing local collections, created if not present #filesystem_folder = /var/lib/radicale/collections filesystem_folder = /data/collections # Delete sync token that are older (seconds) #max_sync_token_age = 2592000 # Command that is run after changes to storage # Example: ([ -d .git ] || git init) \u0026\u0026 git add -A \u0026\u0026 (git diff --cached --quiet || git commit -m \"Changes by \\\"%(user)s\\\"\") #hook = [web] # Web interface backend # Value: none | internal type = internal [logging] level = debug # Threshold for the logger # Value: debug | info | warning | error | critical #level = info # Don't include passwords in logs #mask_passwords = True [headers] # Additional HTTP headers #Access-Control-Allow-Origin = * [hook] # Hook types # Value: none | rabbitmq #type = none #rabbitmq_endpoint = #rabbitmq_topic = #rabbitmq_queue_type = classic Then it comes to the last step, generating the credential. I use SHA-512 encryption method. The first step is to install htpasswd, running this command:\n1 apt install apache2-utils Then, go to the traefik/auth directory, and run this command:\n1 htpasswd -s -c ./radicale username password Replace the username and the password with your own username and password. After that, the credential can be generated. If you want to add more users, please remove the -c flag, which means creating a new file that will overwrite the original file.\nNow, just run docker compose up -d to start the docker container. Try to access the website. If everything goes well, after inputting the username and the password, it will redirect to the https://radicale.example.com/.web/ and display a user interface. After logging in, you can create calendars.\nConfigure Clients Desktop It is easy to configure Thunderbird Calendar. Firstly, open Thunderbird and go to the calendar tab. Then, click on New Calendar and select On the Network. Finally, input the username and the domain and click Find Calendars.\nAndroid The process is similar to configuring Thunderbird Calendar. Just click the + sign, and input the URL and username.\nHowever, DAVx5 is only a tool for synchronization, which means it does not provide the user interface, and we can treat it as a backend.\nFor the frontend, I choose Etar Calendar. It is also easy to configure Etar Calendar, just launch the application and go to the setting page. Then, click Add CalDAV Calendar button, and it will jump to DAVx5, where you can select calendars in Radicale. Finally, it can show the events in the calendars.\nReferences ChatGPT Radicale Document Fireyeah Traefik Document docker-radicale Radicale Discussions ",
+  "wordCount" : "1579",
+  "inLanguage": "en",
+  "datePublished": "2025-02-07T00:00:00Z",
+  "dateModified": "2025-02-07T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Fovir"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://www.fovir.fyi/posts/2025/personal-schedule-solution/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Fovir.FYI",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://img.fovir.fyi/fovir.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class=" dark" id="
+    top">
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://www.fovir.fyi/" accesskey="h" title="Fovir.FYI (Alt + H)">Fovir.FYI</a>
+            <div class="logo-switches">
+                <ul class="lang-switch"><li>|</li>
+                    <li>
+                        <a href="https://www.fovir.fyi/zh/" title="中文 🇨🇳 "
+                            aria-label="中文 :flag_China: ">中文 🇨🇳 </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://www.fovir.fyi/search/" title="Search (Alt &#43; /)" accesskey=/>
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.fovir.fyi/archives/" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.fovir.fyi/categories/" title="Category">
+                    <span>Category</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://www.fovir.fyi/friends/" title="Frineds">
+                    <span>Frineds</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="post-main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://www.fovir.fyi/">Home</a>&nbsp;»&nbsp;<a href="https://www.fovir.fyi/posts/">Posts</a></div>
+    <h1 class="post-title entry-hint-parent">
+      Personal Schedule Solution
+    </h1>
+    <div class="post-meta"><span title='2025-02-07 00:00:00 +0000 UTC'>February 7, 2025</span>&nbsp;·&nbsp;1579 words&nbsp;·&nbsp;Fovir
+
+</div>
+  </header> <aside id="toc-container" class="toc-container wide">
+        <div class="toc">
+            <details  open>
+                <summary accesskey="c" title="(Alt + C)">
+                    <span class="details">Table of Contents</span>
+                </summary>
+
+                <div class="inner"><ul>
+                        <li>
+                            <a href="#background" aria-label="Background">Background</a></li>
+                        <li>
+                            <a href="#my-solution" aria-label="My Solution">My Solution</a></li>
+                        <li>
+                            <a href="#deploy-traefik" aria-label="Deploy Traefik">Deploy Traefik</a></li>
+                        <li>
+                            <a href="#deploy-radicale" aria-label="Deploy Radicale">Deploy Radicale</a></li>
+                        <li>
+                            <a href="#configure-clients" aria-label="Configure Clients">Configure Clients</a><ul>
+                                    
+                        <li>
+                            <a href="#desktop" aria-label="Desktop">Desktop</a></li>
+                        <li>
+                            <a href="#android" aria-label="Android">Android</a>
+                        </li>
+                    </ul>
+                    </li>
+                    </ul>
+                </div>
+            </details>
+        </div>
+    </aside>
+    <script>
+        let activeElement;
+        let elements;
+        window.addEventListener('DOMContentLoaded', function (event) {
+            checkTocPosition();
+
+            elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+            
+            activeElement = elements[0];
+            const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+            document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+        }, false);
+
+        window.addEventListener('resize', function (event) {
+            checkTocPosition();
+        }, false);
+
+        window.addEventListener('scroll', () => {
+            
+            activeElement = Array.from(elements).find((element) => {
+                if ((getOffsetTop(element) - window.pageYOffset) > 0 &&
+                    (getOffsetTop(element) - window.pageYOffset) < window.innerHeight / 2) {
+                    return element;
+                }
+            }) || activeElement
+
+            elements.forEach(element => {
+                const id = encodeURI(element.getAttribute('id')).toLowerCase();
+                if (element === activeElement) {
+                    document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+                } else {
+                    document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+                }
+            })
+        }, false);
+
+        const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+        const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+        const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+        function checkTocPosition() {
+            const width = document.body.scrollWidth;
+
+            if (width - main - (toc * 2) - (gap * 4) > 0) {
+                document.getElementById("toc-container").classList.add("wide");
+            } else {
+                document.getElementById("toc-container").classList.remove("wide");
+            }
+        }
+
+        function getOffsetTop(element) {
+            if (!element.getClientRects().length) {
+                return 0;
+            }
+            let rect = element.getBoundingClientRect();
+            let win = element.ownerDocument.defaultView;
+            return rect.top + win.pageYOffset;
+        }
+    </script>
+  <div class="post-content"><h1 id="background">Background<a hidden class="anchor" aria-hidden="true" href="#background">#</a></h1>
+<p>Due to large number of schedule, it is necessary for me to have a calendar which can help me to schedule my day. In the last year, I used <a href="https://www.microsoft.com/en-us/microsoft-365/outlook/calendar-app">Outlook Calendar</a> to schedule my time. It is both useful and convenient, but I still choose to self-host a scheduler for privacy reasons.</p>
+<h1 id="my-solution">My Solution<a hidden class="anchor" aria-hidden="true" href="#my-solution">#</a></h1>
+<p>My solution contains two parts, the server and the client. Both of them should be open-source and non-commercialized applications, which can protect my privacy as much as possible.</p>
+<p>For the server side, I choose <a href="https://radicale.org/">Radicale</a> to be the <a href="https://en.wikipedia.org/wiki/CalDAV">CalDAV</a> backend, and use <a href="https://traefik.io/">Traefik</a> for reverse proxy. To hide the IP of my server, I have Radicale running behind <a href="https://gcore.com/">Gcore</a>&rsquo;s CDN.</p>
+<p>For the client side, I have two platforms, the Linux Desktop and the Android mobile phone. For the previous one, I use <a href="https://www.thunderbird.net/">Thunderbird Calendar</a> and for the last one, I use <a href="https://www.davx5.com/">DAVx5</a> + <a href="https://github.com/Etar-Group/Etar-Calendar">Etar Calendar</a>.</p>
+<p>So my solution can be displayed as a graph below:</p>
+<div class="mermaid">graph LR
+    subgraph Server
+        Radicale-->Traefik
+    end
+    subgraph Clients
+        subgraph Linux
+            Thunderbird
+        end
+        subgraph Android
+            DAVx5-->client[Etar Calendar]
+        end
+    end
+    Gcore[Gcore CDN]
+    Traefik-->Gcore
+    Gcore-->Thunderbird
+    Gcore-->DAVx5
+</div>
+<p>Now, I will introduce how to deploy Radicale and Traefik and how to configure the clients.</p>
+<h1 id="deploy-traefik">Deploy Traefik<a hidden class="anchor" aria-hidden="true" href="#deploy-traefik">#</a></h1>
+<p>I use docker compose to deploy Traefik. Here is my compose file:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">version</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">reverse-proxy</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">traefik:v3.2</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">traefik</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="nt">command</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="s2">&#34;--api.insecure=false&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="s2">&#34;--log.level=DEBUG&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="s2">&#34;--providers.docker=true&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="s2">&#34;--providers.docker.exposedbydefault=false&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="s2">&#34;--entrypoints.websecure.address=:443&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="s2">&#34;--entryPoints.websecure.http.tls.certResolver=myresolver&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="s2">&#34;--certificatesresolvers.myresolver.acme.tlschallenge=true&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="s2">&#34;--certificatesresolvers.myresolver.acme.email=your-email@example.com&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="s2">&#34;--certificatesresolvers.myresolver.acme.storage=/acme.json&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># - &#34;--certificatesresolvers.myresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="nt">ulimits</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">nproc</span><span class="p">:</span><span class="w"> </span><span class="m">65535</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">nofile</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">soft</span><span class="p">:</span><span class="w"> </span><span class="m">65535</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">hard</span><span class="p">:</span><span class="w"> </span><span class="m">65535</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="nt">networks</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span>- <span class="l">traefik</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span>- <span class="s2">&#34;443:443&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span>- <span class="l">/var/run/docker.sock:/var/run/docker.sock</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span>- <span class="l">./acme.json:/acme.json</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">     </span>- <span class="l">./auth:/auth</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">networks</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">traefik</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="nt">external</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Replace the <code>your-email@example.com</code> with your email.</p>
+<p>The <code>./auth</code> folder in line 30 stores the user authentication information of Radicale, and I will explain it further in the next section.</p>
+<p>Before starting, it needs a network, running the following command to create a network.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker network create traefik
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>To store the SSL certificate, it also requires a file named <code>acme.json</code>. Just running these commands.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">touch acme.json
+</span></span><span class="line"><span class="cl">chmod <span class="m">600</span> acme.json
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><strong>Attention</strong>: The <code>chmod 600 acme.json</code> is very important!</p></blockquote>
+<p>Now, the directory looks like:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">traefik/
+</span></span><span class="line"><span class="cl">├── acme.json
+</span></span><span class="line"><span class="cl">├── auth
+</span></span><span class="line"><span class="cl">│   └── radicale
+</span></span><span class="line"><span class="cl">└── docker-compose.yml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>The radicale stores the credential of Radicale authentication.</p></blockquote>
+<p>Now, we can start with the following command.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker compose up -d
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="deploy-radicale">Deploy Radicale<a hidden class="anchor" aria-hidden="true" href="#deploy-radicale">#</a></h1>
+<p>I prefer to deploy application with docker. So I use <a href="https://github.com/tomsquest/docker-radicale">docker-radicale</a> to deploy Radicale.</p>
+<p>Here is my compose file and I will explain it later.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># Can be enhanced with an additional compose file</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># See also https://docs.docker.com/compose/production/#modify-your-compose-file-for-production</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">services</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">radicale</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">tomsquest/docker-radicale</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l">radicale</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">ports</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="m">127.0.0.1</span><span class="p">:</span><span class="m">5232</span><span class="p">:</span><span class="m">5232</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">init</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">read_only</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">security_opt</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="kc">no</span>-<span class="l">new-privileges:true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">cap_drop</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">ALL</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">cap_add</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">SETUID</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">SETGID</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">CHOWN</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">KILL</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">deploy</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">resources</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">limits</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">memory</span><span class="p">:</span><span class="w"> </span><span class="l">256M</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="nt">pids</span><span class="p">:</span><span class="w"> </span><span class="m">50</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">healthcheck</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">test</span><span class="p">:</span><span class="w"> </span><span class="l">curl -f http://127.0.0.1:5232 || exit 1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">interval</span><span class="p">:</span><span class="w"> </span><span class="l">30s</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">retries</span><span class="p">:</span><span class="w"> </span><span class="m">3</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">restart</span><span class="p">:</span><span class="w"> </span><span class="l">unless-stopped</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;traefik.enable=true&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;traefik.http.routers.radicale.rule=Host(`radicale.example.com`)&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;traefik.http.routers.radicale.entrypoints=websecure&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;traefik.http.routers.radicale.tls.certresolver=myresolver&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;traefik.docker.network=traefik&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;traefik.http.routers.radicale.middlewares=radicale-auth&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;traefik.http.middlewares.radicale-auth.basicauth.usersfile=/auth/radicale&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s2">&#34;traefik.http.middlewares.radicale-auth.basicauth.headerField=X-Remote-User&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">networks</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">traefik</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">./data:/data</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="l">./config:/config:ro</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">networks</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">traefik</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">   </span><span class="nt">external</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Replace the <code>radicale.example.com</code> with your own domain, and set an A DNS record which points to the IP of your server. Once the ACME challenge is done, there will be some content in the <code>acme.json</code>.</p>
+<p>For security reasons, it is better to turn on the authentication option. So I add a middle ware between Radicale and Traefik for authentication. Since Radicale uses a configuration file to setting, we need to create a file named <code>config</code> and put it under the <code>config/</code> folder. So the structure of the directory is:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">radicale/
+</span></span><span class="line"><span class="cl">├── config
+</span></span><span class="line"><span class="cl">│   └── config
+</span></span><span class="line"><span class="cl">└── docker-compose.yml
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>There are three types of authentication, <code>htpasswd</code>, <code>remote_user</code> and <code>http_x_remote_user</code>. Because I use Traefik, so I have to use the last one, <code>http_x_remote_user</code>. The configuration file is below:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="c1"># -*- mode: conf -*-</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># vim:ft=cfg</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Config file for Radicale - A simple calendar server</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Place it into /etc/radicale/config (global)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># or ~/.config/radicale/config (user)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># The current values are the default ones</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[server]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># CalDAV server hostnames separated by a comma</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># IPv4 syntax: address:port</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># IPv6 syntax: [address]:port</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Hostname syntax (using &#34;getaddrinfo&#34; to resolve to IPv4/IPv6 adress(es)): hostname:port</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># For example: 0.0.0.0:9999, [::]:9999, localhost:9999</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#hosts = localhost:5232</span>
+</span></span><span class="line"><span class="cl"><span class="na">hosts</span> <span class="o">=</span> <span class="s">0.0.0.0:5232</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Max parallel connections</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#max_connections = 8</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Max size of request body (bytes)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#max_content_length = 100000000</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Socket timeout (seconds)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#timeout = 30</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># SSL flag, enable HTTPS protocol</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#ssl = False</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># SSL certificate path</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#certificate = /etc/ssl/radicale.cert.pem</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># SSL private key</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#key = /etc/ssl/radicale.key.pem</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># CA certificate for validating clients. This can be used to secure</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># TCP traffic between Radicale and a reverse proxy</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#certificate_authority =</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[encoding]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Encoding for responding requests</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#request = utf-8</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Encoding for storing local collections</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#stock = utf-8</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[auth]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Authentication method</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Value: none | htpasswd | remote_user | http_x_remote_user</span>
+</span></span><span class="line"><span class="cl"><span class="na">type</span> <span class="o">=</span> <span class="s">http_x_remote_user</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Htpasswd filename</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># htpasswd_filename =</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Htpasswd encryption method</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Value: plain | bcrypt | md5 | sha256 | sha512 | autodetect</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># bcrypt requires the installation of &#39;bcrypt&#39; module.</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># htpasswd_encryption =</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Incorrect authentication delay (seconds)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#delay = 1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Message displayed in the client when a password is needed</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#realm = Radicale - Password Required</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Сonvert username to lowercase, must be true for case-insensitive auth providers</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#lc_username = False</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[rights]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Rights backend</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Value: none | authenticated | owner_only | owner_write | from_file</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># type = owner_only</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># File for rights management from_file</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#file = /etc/radicale/rights</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Permit delete of a collection (global)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#permit_delete_collection = True</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[storage]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Storage backend</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Value: multifilesystem | multifilesystem_nolock</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#type = multifilesystem</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Folder for storing local collections, created if not present</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#filesystem_folder = /var/lib/radicale/collections</span>
+</span></span><span class="line"><span class="cl"><span class="na">filesystem_folder</span> <span class="o">=</span> <span class="s">/data/collections</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Delete sync token that are older (seconds)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#max_sync_token_age = 2592000</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Command that is run after changes to storage</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Example: ([ -d .git ] || git init) &amp;&amp; git add -A &amp;&amp; (git diff --cached --quiet || git commit -m &#34;Changes by \&#34;%(user)s\&#34;&#34;)</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#hook =</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[web]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Web interface backend</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Value: none | internal</span>
+</span></span><span class="line"><span class="cl"><span class="na">type</span> <span class="o">=</span> <span class="s">internal</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[logging]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="na">level</span> <span class="o">=</span> <span class="s">debug</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Threshold for the logger</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Value: debug | info | warning | error | critical</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#level = info</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Don&#39;t include passwords in logs</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#mask_passwords = True</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[headers]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Additional HTTP headers</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#Access-Control-Allow-Origin = *</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[hook]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Hook types</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Value: none | rabbitmq</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#type = none</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#rabbitmq_endpoint =</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#rabbitmq_topic =</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#rabbitmq_queue_type = classic</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Then it comes to the last step, generating the credential. I use <code>SHA-512</code> encryption method. The first step is to install <code>htpasswd</code>, running this command:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt install apache2-utils
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Then, go to the <code>traefik/auth</code> directory, and run this command:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">htpasswd -s -c ./radicale username password
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>Replace the <code>username</code> and the <code>password</code> with your own username and password. After that, the credential can be generated. If you want to add more users, please remove the <code>-c</code> flag, which means creating a new file that will overwrite the original file.</p>
+<p>Now, just run <code>docker compose up -d</code> to start the docker container. Try to access the website. If everything goes well, after inputting the username and the password, it will redirect to the <code>https://radicale.example.com/.web/</code> and display a user interface. After logging in, you can create calendars.</p>
+<h1 id="configure-clients">Configure Clients<a hidden class="anchor" aria-hidden="true" href="#configure-clients">#</a></h1>
+<h2 id="desktop">Desktop<a hidden class="anchor" aria-hidden="true" href="#desktop">#</a></h2>
+<p>It is easy to configure Thunderbird Calendar. Firstly, open Thunderbird and go to the calendar tab. Then, click on <code>New Calendar</code> and select <code>On the Network</code>. Finally, input the username and the domain and click <code>Find Calendars</code>.</p>
+<h2 id="android">Android<a hidden class="anchor" aria-hidden="true" href="#android">#</a></h2>
+<p>The process is similar to configuring Thunderbird Calendar. Just click the <code>+</code> sign, and input the URL and username.</p>
+<p>However, DAVx5 is only a tool for synchronization, which means it does not provide the user interface, and we can treat it as a backend.</p>
+<p>For the frontend, I choose Etar Calendar. It is also easy to configure Etar Calendar, just launch the application and go to the setting page. Then, click <code>Add CalDAV Calendar</code> button, and it will jump to DAVx5, where you can select calendars in Radicale. Finally, it can show the events in the calendars.</p>
+<hr>
+<blockquote>
+<p>References <br/>
+<a href="https://chatgpt.com/">ChatGPT</a> <br/>
+<a href="https://radicale.org/v3.html">Radicale Document</a> <br/>
+<a href="https://blog.0pt.icu/posts/server/traefik-simple-guide/">Fireyeah</a> <br/>
+<a href="https://doc.traefik.io/traefik/">Traefik Document</a> <br/>
+<a href="https://github.com/tomsquest/docker-radicale">docker-radicale</a> <br/>
+<a href="https://github.com/Kozea/Radicale/discussions/1368">Radicale Discussions</a> <br/></p></blockquote>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+<nav class="paginav">
+  <a class="next" href="https://www.fovir.fyi/posts/2025/escalate_privileges_from_grub/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Escalate Privileges from Grub</span>
+  </a>
+</nav>
+
+
+<ul class="share-buttons">
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Personal Schedule Solution on x"
+            href="https://x.com/intent/tweet/?text=Personal%20Schedule%20Solution&amp;url=https%3a%2f%2fwww.fovir.fyi%2fposts%2f2025%2fpersonal-schedule-solution%2f&amp;hashtags=">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Personal Schedule Solution on linkedin"
+            href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fwww.fovir.fyi%2fposts%2f2025%2fpersonal-schedule-solution%2f&amp;title=Personal%20Schedule%20Solution&amp;summary=Personal%20Schedule%20Solution&amp;source=https%3a%2f%2fwww.fovir.fyi%2fposts%2f2025%2fpersonal-schedule-solution%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Personal Schedule Solution on reddit"
+            href="https://reddit.com/submit?url=https%3a%2f%2fwww.fovir.fyi%2fposts%2f2025%2fpersonal-schedule-solution%2f&title=Personal%20Schedule%20Solution">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Personal Schedule Solution on facebook"
+            href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fwww.fovir.fyi%2fposts%2f2025%2fpersonal-schedule-solution%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Personal Schedule Solution on whatsapp"
+            href="https://api.whatsapp.com/send?text=Personal%20Schedule%20Solution%20-%20https%3a%2f%2fwww.fovir.fyi%2fposts%2f2025%2fpersonal-schedule-solution%2f">
+            <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Personal Schedule Solution on telegram"
+            href="https://telegram.me/share/url?text=Personal%20Schedule%20Solution&amp;url=https%3a%2f%2fwww.fovir.fyi%2fposts%2f2025%2fpersonal-schedule-solution%2f">
+            <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+                <path
+                    d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+            </svg>
+        </a>
+    </li>
+    <li>
+        <a target="_blank" rel="noopener noreferrer" aria-label="share Personal Schedule Solution on ycombinator"
+            href="https://news.ycombinator.com/submitlink?t=Personal%20Schedule%20Solution&u=https%3a%2f%2fwww.fovir.fyi%2fposts%2f2025%2fpersonal-schedule-solution%2f">
+            <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+                xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+                <path
+                    d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+            </svg>
+        </a>
+    </li>
+</ul>
+
+  </footer><head>
+    
+    <link rel="stylesheet" href="https://unpkg.com/@waline/client@v3/dist/waline.css" />
+    
+</head>
+
+<body>
+    
+    <div id="waline"></div>
+    <script type="module">
+        import { init } from 'https://unpkg.com/@waline/client@v3/dist/waline.js';
+
+        init({
+            el: '#waline',
+            serverURL: 'https://waline.fovir.fyi',
+            dark: 'auto',
+            lang: 'en',
+            search: false,
+            reaction: false,
+        });
+    </script>
+</body>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2025 <a href="https://www.fovir.fyi/">Fovir.FYI</a></span> · 
+
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+
+
+
+
+<script>
+    Fancybox.bind("[data-fancybox]", {
+        
+    });
+</script>
+
+
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script></body>
+
+</html>

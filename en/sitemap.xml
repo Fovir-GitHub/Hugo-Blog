@@ -3,7 +3,7 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.fovir.fyi/categories/</loc>
-    <lastmod>2025-01-18T00:00:00+00:00</lastmod>
+    <lastmod>2025-02-07T00:00:00+00:00</lastmod>
     <xhtml:link
                 rel="alternate"
                 hreflang="zh"
@@ -14,6 +14,38 @@
                 hreflang="en"
                 href="https://www.fovir.fyi/categories/"
                 />
+  </url><url>
+    <loc>https://www.fovir.fyi/</loc>
+    <lastmod>2025-02-07T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh"
+                href="https://www.fovir.fyi/zh/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://www.fovir.fyi/"
+                />
+  </url><url>
+    <loc>https://www.fovir.fyi/posts/2025/personal-schedule-solution/</loc>
+    <lastmod>2025-02-07T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://www.fovir.fyi/posts/</loc>
+    <lastmod>2025-02-07T00:00:00+00:00</lastmod>
+    <xhtml:link
+                rel="alternate"
+                hreflang="zh"
+                href="https://www.fovir.fyi/zh/posts/"
+                />
+    <xhtml:link
+                rel="alternate"
+                hreflang="en"
+                href="https://www.fovir.fyi/posts/"
+                />
+  </url><url>
+    <loc>https://www.fovir.fyi/categories/website/</loc>
+    <lastmod>2025-02-07T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://www.fovir.fyi/categories/cyber-security/</loc>
     <lastmod>2025-01-18T00:00:00+00:00</lastmod>
@@ -29,32 +61,6 @@
                 rel="alternate"
                 hreflang="en"
                 href="https://www.fovir.fyi/posts/2025/escalate_privileges_from_grub/"
-                />
-  </url><url>
-    <loc>https://www.fovir.fyi/</loc>
-    <lastmod>2025-01-18T00:00:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="https://www.fovir.fyi/zh/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://www.fovir.fyi/"
-                />
-  </url><url>
-    <loc>https://www.fovir.fyi/posts/</loc>
-    <lastmod>2025-01-18T00:00:00+00:00</lastmod>
-    <xhtml:link
-                rel="alternate"
-                hreflang="zh"
-                href="https://www.fovir.fyi/zh/posts/"
-                />
-    <xhtml:link
-                rel="alternate"
-                hreflang="en"
-                href="https://www.fovir.fyi/posts/"
                 />
   </url><url>
     <loc>https://www.fovir.fyi/archives/</loc>
